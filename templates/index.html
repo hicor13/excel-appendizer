@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel to CSV Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Data Processor</h2>
+        
+        <form id="procForm" method="POST" enctype="multipart/form-data" class="space-y-5">
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Upload XLSX File</label>
+                <input type="file" name="file" accept=".xlsx" required 
+                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Filename (Col A)</label>
+                <input type="text" name="col1_val" id="col1_val" placeholder="Type name and press Enter..." required
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Select Period (Col B)</label>
+                <select name="col2_val" id="col2_select" required
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <option value="" disabled selected>Choose a period...</option>
+                    <option value="202601">202601</option>
+                    <option value="202602">202602</option>
+                    <option value="202603">202603</option>
+                    <option value="202604">202604</option>
+                    <option value="202605">202605</option>
+                    <option value="202606">202606</option>
+                    <option value="202607">202607</option>
+                    <option value="202608">202608</option>
+                    <option value="202609">202609</option>
+                    <option value="202610">202610</option>
+                    <option value="202611">202611</option>
+                    <option value="202612">202612</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submitBtn"
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transition duration-150">
+                Process & Download CSV
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const selectEl = document.getElementById('col2_select');
+        const nameInput = document.getElementById('col1_val');
+        const form = document.getElementById('procForm');
+
+        // 1. Load saved values on startup
+        window.addEventListener('load', () => {
+            const savedPeriod = localStorage.getItem('selectedPeriod');
+            const savedName = localStorage.getItem('savedName');
+            
+            if (savedPeriod) selectEl.value = savedPeriod;
+            if (savedName) nameInput.value = savedName;
+        });
+
+        // 2. Save values whenever they change
+        selectEl.addEventListener('change', () => {
+            localStorage.setItem('selectedPeriod', selectEl.value);
+        });
+
+        nameInput.addEventListener('input', () => {
+            localStorage.setItem('savedName', nameInput.value);
+        });
+        
+        // Bonus: Visual feedback when pressing Enter/Submit
+        form.addEventListener('submit', () => {
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = 'Processing...';
+            setTimeout(() => { btn.innerText = 'Process & Download CSV'; }, 2000);
+        });
+    </script>
+
+</body>
+</html>
